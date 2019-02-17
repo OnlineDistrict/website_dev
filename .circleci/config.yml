@@ -5,15 +5,15 @@
 version: 2
 jobs:
   build:
+    working_directory: ~/website_dev/home/
     docker:
       - image: circleci/php:7.1-browsers
- 
     steps:
       - checkout
  
       - add_ssh_keys:
           fingerprints:
-            - "xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx"
+            - "57:f9:b3:14:1f:46:52:82:c1:9e:6c:f3:ce:73:3a:05"
  
       - run:
           name: Start ssh-keyscan
