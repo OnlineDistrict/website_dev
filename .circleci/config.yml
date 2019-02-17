@@ -5,7 +5,7 @@
 version: 2
 jobs:
   build:
-    working_directory: ~/website_dev/home/
+    working_directory: ~/website_dev/
     docker:
       - image: circleci/php:7.1-browsers
     steps:
