@@ -1,26 +1,28 @@
-# PHP CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-php/ for more details
-#
+# Environment variables
+# - HOST_NAME
+# - USER_NAME
+ 
 version: 2
 jobs:
   build:
     docker:
-      # Specify the version you desire here
-    - image: circleci/php:7.1-node-browsers
-      working_directory: ~/websitedev/home/
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # Using the RAM variation mitigates I/O contention
-      # for database intensive operations.
-      # - image: circleci/mysql:5.7-ram
-      #
-      # - image: redis:2.8.19
-
+      - image: circleci/php:7.1-browsers
+ 
     steps:
       - checkout
-
-      - run: sudo apt update # PHP CircleCI 2.0 Configuration File# PHP CircleCI 2.0 Configuration File sudo apt install zlib1g-dev libsqlite3-dev
-      - run: sudo apt-get install mysql-server
-      - run: sudo docker-php-ext-install zip
+ 
+      - add_ssh_keys:
+          fingerprints:
+            - "xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx"
+ 
+      - run:
+          name: Start ssh-keyscan
+          command: |
+            ssh-keyscan ${HOST_NAME} >> ~/.ssh/known_hosts
+ 
+      - deploy:
+          name: Start master deploy
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+                rsync -av --delete --exclude='.git' --exclude='.circleci' ./ ${USER_NAME}@${HOST_NAME}:/var/www/html/
+            fi
